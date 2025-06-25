@@ -1,0 +1,43 @@
+# Entorno virtual (ajusta el nombre si tu venv tiene otro nombre)
+venv/
+.env/
+.venv/
+
+# Archivos de caché de Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Archivos temporales del sistema
+.DS_Store
+Thumbs.db
+
+# Archivos de log y bases de datos temporales
+*.log
+*.sqlite3
+
+# Configuración de IDEs (opcional, pero común)
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# Archivos de pruebas
+htmlcov/
+.tox/
+.coverage
+.cache/
+nosetests.xml
+coverage.xml
+*.cover
+*.pytest_cache/
+
+# Distribución
+build/
+dist/
+*.egg-info/
+.eggs/
+
+# Archivos de configuración locales
+.envrc
+*.env
