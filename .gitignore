@@ -41,3 +41,6 @@ dist/
 # Archivos de configuración locales
 .envrc
 *.env
+
+#No archivos log
+.log

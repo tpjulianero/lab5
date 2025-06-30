@@ -1,10 +1,17 @@
+import logging
 from datetime import datetime
 from typing import List, Dict
 
+#Configuración de loggin
+logging.basicConfig (
+    filename="log_contable.log",
+    level=logging.INFO,
+    format='%(asctime)s - %(levelname)s - %(filename)s - %(lineno)d - %(funcName)s - %(message)s '
+)
 class MontoInvalidoError(Exception):
     pass
-
-class LibroDiario:    
+class LibroDiario:
+   
     """Gestión contable básica de ingresos y egresos."""
 
     def __init__(self):
@@ -12,20 +19,21 @@ class LibroDiario:
 
     def agregar_transaccion(self, fecha: str, descripcion: str, monto: float, tipo: str) -> None:
         """Agrega una transacción al libro diario."""
-        
         tipo = tipo.lower()
-
         if tipo not in ("ingreso", "egreso"):
-            raise ValueError(f"Tipo de transacción inválido({tipo}). Use 'ingreso' o 'egreso'.")
-        
+            mensaje = f"Tipo de transacción inválido({tipo}). Use 'ingreso' o 'egreso'."
+            logging.error(mensaje)
+            raise ValueError (mensaje)
         try:
-            obj_fecha= datetime.strptime(fecha, "%d/%m/%Y")    
+            obj_fecha= datetime.strptime(fecha, "%d/%m/%Y")
         except Exception as e:
-            raise ValueError(f"Formato de fecha inválido({fecha}). Use 'dd/mm//yyyy'.")
-        
+            mensaje = f"Formato de fecha inválido({fecha}). Use 'dd/mm//yyyy'."
+            logging.error(mensaje)
+            raise ValueError (mensaje)
         if monto < 0:
-            raise MontoInvalidoError(f"Monto inválido ({monto}). El monto debe ser mayor a 0")
-        
+            mensaje = f"Monto inválido ({monto}). El monto debe ser mayor a 0"
+            logging.error(mensaje)
+            raise ValueError(mensaje)
         transaccion = {
             "fecha": obj_fecha,
             "descripcion": descripcion,
@@ -33,10 +41,10 @@ class LibroDiario:
             "tipo": tipo
         }
         self.transacciones.append(transaccion)
+        logging.info(f"Transacción (${fecha} - ${monto}) exitosa")
 
     def calcular_resumen(self) -> Dict[str, float]:
         """Devuelve el resumen total de ingresos y egresos."""
-
         resumen = {"ingresos": 0.0, "egresos": 0.0}
         for transaccion in self.transacciones:
             if transaccion["tipo"] == "ingreso":
