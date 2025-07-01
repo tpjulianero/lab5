@@ -52,3 +52,39 @@ class LibroDiario:
             else:
                 resumen["egresos"] += transaccion["monto"]
         return resumen
+   
+    def cargar_transacciones_desde_archivo(self, path: str) -> None:
+        #...
+        try:
+            with open(path, "r") as f:
+                for linea in f:
+                    datos = linea.strip().split(";")
+                    if len(datos) != 4:
+                        logging.error(f"Linea inválida(formato) {linea}")
+                        continue
+                    fecha, descripcion, valor, tipo = datos
+                    try:
+                        monto = float(valor)
+                    except ValueError as e:
+                        continue
+                    try:
+                        self.agregar_transaccion(
+                        self.convertir_fecha(fecha),
+                        descripcion,
+                        monto,
+                        tipo
+                        )
+                    except (ValueError, MontoInvalidoError) as e:
+                        continue
+                    except ValueError as e:
+                        logging.error(f"Monto no se puede convertir a float ({valor})")
+                        continue
+                   
+                   
+                    except (ValueError, MontoInvalidoError) as e:
+                        continue
+        except FileNotFoundError as e:
+            logging.critical(f"El archivo {path} no existe")
+    def convertir_fecha(self,fecha: str) -> str:
+        dato = fecha.split ("-") #Fecha= 2025-06-01
+        return f"{dato[2]}/{dato[1]/{dato[0]}}"
